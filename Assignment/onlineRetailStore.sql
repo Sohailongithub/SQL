@@ -1,1 +1,0 @@
-SELECT * FROM online_retail_store.categories;
