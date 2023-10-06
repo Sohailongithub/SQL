@@ -92,6 +92,36 @@ GROUP BY s.student_name
 ORDER BY total_score DESC;
 
 -- 8. Question: Find the student(s) who scored the highest in the class with the lowest average score.
+SELECT 
+    s.student_id,
+    s.student_name,
+    c.class_id,
+    c.class_name,
+    MAX(sc.score) AS highest_score
+FROM
+    Students s
+JOIN
+    Classes c ON s.class_id = c.class_id
+JOIN
+    Scores sc ON s.student_id = sc.student_id
+WHERE
+    c.class_id = (
+        SELECT 
+            class_id
+        FROM
+            Students s
+        JOIN
+            Scores sc ON s.student_id = sc.student_id
+        GROUP BY
+            s.class_id
+        ORDER BY
+            AVG(sc.score)
+        LIMIT 1
+    )
+GROUP BY
+    s.student_id, s.student_name, c.class_id, c.class_name
+ORDER BY
+    highest_score DESC;
 
 -- 9. Question: List the names of students who scored the same as Alice in at least one subject.
 SELECT DISTINCT s2.student_name
